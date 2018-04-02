@@ -7,7 +7,7 @@ def main():
     currentTemperature=0
     inputCommand = ""
 
-    fileManager = fakeFileManager()
+    fileManager = consoleOutput(fileOutput())
     thermometer = fakeThermometer()
 
     reader = thermometerReader(fileManager, thermometer)
@@ -48,9 +48,17 @@ class fakeThermometer():
     def getTemperature(self):
 	return random()
 
-class fakeFileManager():
+class consoleOutput():
+    def __init__(self, child):
+	self.child = child
+
     def write(self, outputValue):
 	print('{0}'.format(outputValue))
+	self.child.write(outputValue)
+
+class fileOutput():
+    def write(self, outputValue):
+	print('File output here : {0}'.format(outputValue))
 
 if __name__ == "__main__":
     main()
