@@ -6,6 +6,8 @@ import time
 import sys
 import random
 
+
+
 def main():
     input_command = ""
 
@@ -27,6 +29,7 @@ def main():
             sys.exit()
         else:
             print('continuing')
+
 
 def process_temperature(reader):
     while True:
