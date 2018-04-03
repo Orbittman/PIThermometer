@@ -1,11 +1,63 @@
 #!/usr/bin/python3
 #-*- coding: utf-8 -*-
 
-import threading
-import time
-import sys
-import random
+"""
+Raspberry pi thermometer application
+"""
 
+import sys
+import threading
+from time import sleep
+from random import randint
+
+
+class ThermometerReader():
+    """gets temp from sensor and writes to output"""
+    def __init__(self, file_manager, thermometer):
+        self.current_temperature = 0
+        self.file_manager = file_manager
+        self.thermometer = thermometer
+
+    def process(self):
+        self.current_temperature = self.thermometer.get_temperature()
+        self.file_manager.write(self.current_temperature)
+
+
+        
+class FakeThermometer():
+    """provides random temps from 0 to 100"""
+    def __init__(self):
+        self.temperature = 0
+
+    def get_temperature(self):
+        return randint(0, 100)
+
+
+    
+class ConsoleOutput():
+    """Writes temp to std out"""
+    def __init__(self, child):
+        self.child = child
+
+    def write(self, output_value):
+        print('{0}'.format(output_value))
+        self.child.write(output_value)
+
+        
+        
+class FileOutput():
+    """Writes temp to file or database"""
+    def write(self, output_value):
+        print('File output here : {0}'.format(output_value))
+
+
+        
+def process_temperature(reader):
+    while True:
+        sleep(3)
+        reader.process()
+
+        
 def main():
     input_command = ""
 
@@ -27,44 +79,6 @@ def main():
             sys.exit()
         else:
             print('continuing')
-
-def process_temperature(reader):
-    while True:
-        time.sleep(3)
-        reader.process()
-
-        
-class ThermometerReader():
-    def __init__(self, file_manager, thermometer):
-        self.current_temperature = 0
-        self.file_manager = file_manager
-        self.thermometer = thermometer
-
-    def process(self):
-        self.current_temperature = self.thermometer.get_temperature()
-        self.file_manager.write(self.current_temperature)
-
-        
-class FakeThermometer():
-    def __init__(self):
-        self.temperature = 0
-
-    def get_temperature(self):
-        return random.randint(0, 100)
-
-    
-class ConsoleOutput():
-    def __init__(self, child):
-        self.child = child
-
-    def write(self, output_value):
-        print('{0}'.format(output_value))
-        self.child.write(output_value)
-
-        
-class FileOutput():
-    def write(self, output_value):
-        print('File output here : {0}'.format(output_value))
 
 
         
