@@ -4,7 +4,6 @@ import sys
 from random import *
 
 def main():
-    currentTemperature=0
     inputCommand = ""
 
     fileManager = consoleOutput(fileOutput())
